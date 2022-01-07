@@ -69,6 +69,7 @@
                                 <p class="my-0">My Account</p>
                             </div>
                         </a>
+                        <!-- Tänk på att dropdown hänger ihop med menyn under -->
                         <div class="dropdown-menu border-0" aria-labelledby="user-options">
                             {% if request.user.is_authenticated %}
                                 {% if request.user.is_superuser %}
