@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'ado_app',
+    'products',
 ]
 
 MIDDLEWARE = [
