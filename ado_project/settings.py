@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'ado_app',
     'products',
+    'bag',
 ]
 
 MIDDLEWARE = [
