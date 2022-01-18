@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'ado_app',
     'products',
     'bag',
+    'checkout',
 ]
 
 MIDDLEWARE = [
