@@ -3,11 +3,12 @@ from django.contrib import messages
 from django.conf import settings
 
 from .forms import OrderForm
-from .models import OrderLineItem
+from .models import Order, OrderLineItem
 from products.models import Product
 from bag.contexts import bag_contents
 
 import stripe
+
 
 def checkout(request):
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
@@ -16,7 +17,7 @@ def checkout(request):
     if request.method == 'POST':
         bag = request.session.get('bag', {})
 
-         form_data = {
+        form_data = {
             'full_name': request.POST['full_name'],
             'email': request.POST['email'],
             'phone_number': request.POST['phone_number'],
@@ -27,7 +28,7 @@ def checkout(request):
             'street_address2': request.POST['street_address2'],
             'county': request.POST['county'],
         }
-         order_form = OrderForm(form_data)
+        order_form = OrderForm(form_data)
         if order_form.is_valid():
             order = order_form.save()
             for item_id, item_data in bag.items():
@@ -62,14 +63,12 @@ def checkout(request):
         else:
             messages.error(request, 'There was an error with your form. \
                 Please double check your information.')
-
-    else:    
-
+    else:
         bag = request.session.get('bag', {})
         if not bag:
             messages.error(request, "There's nothing in your bag at the moment")
             return redirect(reverse('products'))
- # Importerad från contexts.py i bag appen
+
         current_bag = bag_contents(request)
         total = current_bag['grand_total']
         stripe_total = round(total * 100)
@@ -80,7 +79,7 @@ def checkout(request):
         )
 
         order_form = OrderForm()
-    
+
     if not stripe_public_key:
         messages.warning(request, 'Stripe public key is missing. \
             Did you forget to set it in your environment?')
@@ -94,7 +93,7 @@ def checkout(request):
 
     return render(request, template, context)
 
-    
+
 def checkout_success(request, order_number):
     """
     Handle successful checkouts
